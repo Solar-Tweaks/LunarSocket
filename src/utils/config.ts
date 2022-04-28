@@ -27,4 +27,8 @@ interface Config {
   enableWhitelist: boolean;
   whitelist: string[];
   operators: string[];
+  iconColor: number;
+  plusColor: number;
+  operatorIconColor: number;
+  operatorPlusColor: number;
 }

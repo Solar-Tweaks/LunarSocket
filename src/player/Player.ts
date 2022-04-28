@@ -50,9 +50,7 @@ export default class Player {
     this.uuid = handshake.playerId;
     this.server = '';
     this.premium = { real: false, fake: true };
-    this.color = { real: 0, fake: 0xa83232 };
     this.clothCloak = { real: false, fake: true };
-    this.plusColor = { real: 0, fake: 0x3295a8 };
 
     this.emotes = {
       owned: { owned: [], fake: [] },
@@ -125,7 +123,11 @@ export default class Player {
     });
 
     (async () => {
-      this.operator = (await getConfig()).operators.includes(this.uuid);
+      var config = await getConfig();
+      this.operator = config.operators.includes(this.uuid);
+
+      this.color = { real: 0, fake: this.operator ? config.operatorIconColor : config.iconColor }
+      this.plusColor = { real: 0, fake: this.operator ? config.operatorPlusColor : config.plusColor };
 
       const outgoingEvents = await readdir(
         join(process.cwd(), 'dist', 'player', 'events', 'outgoing')
