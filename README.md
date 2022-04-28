@@ -48,3 +48,7 @@ Once you have edited the file save it as `config.json` and start the server.
 ```bash
 $ npm start
 ```
+
+# Connecting to the WebSocket
+
+Assuming you want to use SolarTweak then go to Patcher then Websocket Option and put **"ws://localhost:your port/connect"** or **"ws://yourip:your port/connect"** if secure is off **"wss://localhost:your port/connect"** or **"wss://yourip:your port/connect"** if secure port is on.
