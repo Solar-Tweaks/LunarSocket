@@ -17,18 +17,18 @@ let httpsServer: Server;
 
 const config = getConfigSync();
 
-if (config.server.secure) {
+if (config.secure) {
   httpsServer = createServer({
-    cert: readFileSync(config.server.certificates.cert),
-    key: readFileSync(config.server.certificates.key),
+    cert: readFileSync(config.certificates.cert),
+    key: readFileSync(config.certificates.key),
   });
 
-  httpsServer.listen(config.server.port);
+  httpsServer.listen(config.port);
 }
 
 const server = new WebSocketServer({
-  server: config.server.secure ? httpsServer : undefined,
-  port: config.server.secure ? undefined : config.server.port,
+  server: config.secure ? httpsServer : undefined,
+  port: config.secure ? undefined : config.port,
   path: '/connect',
 });
 
@@ -37,7 +37,7 @@ server.on('error', (error) => {
 });
 
 server.on('listening', () => {
-  logger.log(`Server listening on port ${config.server.port}`);
+  logger.log(`Server listening on port ${config.port}`);
 });
 
 server.on('connection', async (socket, request) => {
@@ -67,8 +67,8 @@ server.on('connection', async (socket, request) => {
 
   const config = await getConfig();
 
-  if (config.whitelist.enabled)
-    if (!config.whitelist.list.includes(handshake.playerId))
+  if (config.enableWhitelist)
+    if (!config.whitelist.includes(handshake.playerId))
       return socket.close(3000, 'You are not whitelisted');
 
   // Closing the connection if the player is already connected
