@@ -17,24 +17,23 @@ export async function editConfig(newConfig: Config): Promise<void> {
 }
 
 const defaultConfig = {
-    port: 80,
-    secure: false,
-    certificates: {
-      key: '',
-      cert: '',
-    },
-  whitelist: {
-    enabled: false,
-    list: [] as string[],
+  port: 80,
+  secure: false,
+  certificates: {
+    key: "/path/to/key.key",
+    cert: "/path/to/cert.crt"
   },
-  welcomeMessage: 'LunarSocket made by Cy0ze with love <3',
-  operators: [] as string[],
-  database: {
-    type: 'instanceStorage' as 'instanceStorage' | 'mongo',
-    config: {
-      mongo: 'mongodb://<password>@localhost:27017',
-    },
-  },
+  welcomeMessage: "Welcome!",
+  enableWhitelist: true,
+  whitelist: [
+    "827f8c48-cdb2-4105-af39-df5a64f93490",
+    "7642d15d-2aec-4be8-8cbe-99a53c434248"
+  ],
+  operators: ["827f8c48-cdb2-4105-af39-df5a64f93490"],
+  database: "instanceStorage",
+  databaseConfig: {
+    mongo: "mongo+srv://..."
+  }
 };
 
 type Config = typeof defaultConfig;

@@ -22,7 +22,7 @@ class DatabaseManager {
       mongo: Mongo,
     };
 
-    this.database = new constructors[config.database.type]();
+    this.database = new constructors[config.database]();
   }
 }
 
