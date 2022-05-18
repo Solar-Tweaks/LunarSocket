@@ -19,11 +19,11 @@ const config = getConfigSync();
 
 if (config.secure) {
   httpsServer = createServer({
-    cert: readFileSync(config.server.certificates.cert),
-    key: readFileSync(config.server.certificates.key),
+    cert: readFileSync(config.certificates.cert),
+    key: readFileSync(config.certificates.key),
   });
 
-  httpsServer.listen(config.server.port);
+  httpsServer.listen(config.port);
 }
 
 const server = new WebSocketServer({
