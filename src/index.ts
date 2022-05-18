@@ -17,7 +17,7 @@ let httpsServer: Server;
 
 const config = getConfigSync();
 
-if (config.server.secure) {
+if (config.secure) {
   httpsServer = createServer({
     cert: readFileSync(config.server.certificates.cert),
     key: readFileSync(config.server.certificates.key),
@@ -27,8 +27,8 @@ if (config.server.secure) {
 }
 
 const server = new WebSocketServer({
-  server: config.server.secure ? httpsServer : undefined,
-  port: config.server.secure ? undefined : config.server.port,
+  server: config.secure ? httpsServer : undefined,
+  port: config.secure ? undefined : config.port,
   path: '/connect',
 });
 
@@ -37,7 +37,7 @@ server.on('error', (error) => {
 });
 
 server.on('listening', () => {
-  logger.log(`Server listening on port ${config.server.port}`);
+  logger.log(`Server listening on port ${config.port}`);
 });
 
 server.on('connection', async (socket, request) => {
