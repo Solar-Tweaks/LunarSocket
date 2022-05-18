@@ -17,14 +17,12 @@ export async function editConfig(newConfig: Config): Promise<void> {
 }
 
 const defaultConfig = {
-  server: {
     port: 80,
     secure: false,
     certificates: {
       key: '',
       cert: '',
     },
-  },
   whitelist: {
     enabled: false,
     list: [] as string[],
