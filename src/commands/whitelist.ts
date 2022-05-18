@@ -48,7 +48,7 @@ command.setHandler(async (player, command, args) => {
     case 'off':
       await editConfig({
         ...config,
-        whitelist: false,
+        enableWhitelist: false,
       });
       player.sendConsoleMessage('Whitelist has been §cdisabled');
       break;
@@ -64,7 +64,7 @@ command.setHandler(async (player, command, args) => {
         ...config,
         whitelist: {
           ...config.whitelist,
-          list: [...config.whitelist, args[1]],
+          whitelist: [...config.whitelist, args[1]],
         },
       });
       player.sendConsoleMessage(`${args[1]} has been added to the whitelist`);
@@ -76,7 +76,7 @@ command.setHandler(async (player, command, args) => {
         ...config,
         whitelist: {
           ...config.whitelist,
-          list: config.whitelist.filter((uuid) => uuid !== args[1]),
+          whitelist: config.whitelist.filter((uuid) => uuid !== args[1]),
         },
       });
       player.sendConsoleMessage(
