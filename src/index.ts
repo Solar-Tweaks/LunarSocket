@@ -67,8 +67,8 @@ server.on('connection', async (socket, request) => {
 
   const config = await getConfig();
 
-  if (config.whitelist.enabled)
-    if (!config.whitelist.list.includes(handshake.playerId))
+  if (config.enableWhitelist)
+    if (!config.whitelist.includes(handshake.playerId))
       return socket.close(3000, 'You are not whitelisted');
 
   // Closing the connection if the player is already connected
