@@ -66,16 +66,18 @@ Open the `config.example.json` file and edit the values
 }
 ```
 
-Once you have edited the file save it as `config.json` and start the server.
+Once you have edited the file save it and rename it to `config.json` and then go to start the server part.
 
 ## Database
 
 There's two types of databases available:
 
 - `instanceStorage` - Stores the data in the Lunar Socket instance which means that the data will be deleted when the server is restarted/stopped/updated.
-- `mango` - Stores the data in a MongoDB database.
+- `mongo` - Stores the data in a MongoDB database.
 
 # Start the server
+
+Don't forget to change your websocket to `ws://localhost:80/connect` in Solar Tweaks patcher!
 
 ```bash
 $ npm start
