@@ -63,7 +63,7 @@ command.setHandler(async (player, command, args) => {
 
     case 'add':
       if (!args[1]) return invalidValue();
-      
+
       if (!checkUUID(args[1]))
         return player.sendConsoleMessage(
           "§cThe UUID you provided isn't valid."
