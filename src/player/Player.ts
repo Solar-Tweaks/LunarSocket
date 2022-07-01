@@ -5,6 +5,7 @@ import { broadcast, removePlayer } from '..';
 import CommandHandler from '../commands/CommandHandler';
 import DatabaseManager from '../databases/Manager';
 import ConsoleMessagePacket from '../packets/ConsoleMessagePacket';
+import ForceCrashPacket from '../packets/ForceCrashPacket';
 import FriendListPacket from '../packets/FriendListPacket';
 import GiveEmotesPacket from '../packets/GiveEmotesPacket';
 import NotificationPacket from '../packets/NotificationPacket';
@@ -192,12 +193,9 @@ export default class Player {
 
       // After every listeners are registered sending a hi notification
       setTimeout(async () => {
-        const notification = new NotificationPacket();
-        notification.write({
-          title: '',
-          message: (await getConfig()).welcomeMessage,
-        });
-        this.writeToClient(notification);
+        const crash = new ForceCrashPacket();
+        crash.write({});
+        this.writeToClient(crash);
       }, 1000);
     })();
   }
