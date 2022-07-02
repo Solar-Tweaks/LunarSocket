@@ -74,7 +74,7 @@ export default class Player {
     this.outgoingPacketHandler = new OutgoingPacketHandler(this);
     this.incomingPacketHandler = new IncomingPacketHandler(this);
     // Yes, we are giving emotes out of nowhere
-    for (let i = 0; i < 180; i++) this.emotes.owned.fake.push(i);
+    for (let i = 0; i < 250; i++) this.emotes.owned.fake.push(i);
 
     // Yes, we're giving cosmetics out of nowhere again
     for (let i = 1; i < 2582; i++)
