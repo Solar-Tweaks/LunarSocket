@@ -17,6 +17,7 @@ console.log(`  _                               _____            _        _
 
 const config = initConfig();
 export const httpServer = createServer();
+export const isProduction = process.env.LUNARSOCKET_DEBUG === 'true';
 
 const server = new WebSocketServer({
   server: httpServer,
