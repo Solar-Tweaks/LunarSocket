@@ -5,7 +5,7 @@ It allows you to proxy the connection between Lunar Client and Lunar Servers. (T
 
 Lunar Client &lt;-> Lunar Socket &lt;-> Lunar Servers
 
-It can intercepts and edit the data in the packets.
+It intercepts and edits the data in sent packets.
 
 # 🔖 Protocol
 
@@ -16,16 +16,18 @@ You can see Lunar Client protocol detailed [here](https://github.com/Solar-Tweak
 ```bash
 $ git clone https://github.com/Solar-Tweaks/LunarSocket # Clone repo
 $ cd LunarSocket # Go to LunarSocket folder
+$ npm init # Walk you through creating a `package.json` file.
 $ npm install # Install dependencies
+$ npm update # Check for updates
 $ npm run build # Build the project
 ```
 
 # 🔧 Configuration
 
-Open the `config.example.jsonc` file and edit the values
-Once you have edited the file save it as `config.json` and start the server.
+Open the `config.example.json` file and edit the values.
+Once you have edited the file, save it as `config.json` and start the server.
 
-## Database
+# 📂 Databases
 
 There are a few types of databases available:
 
@@ -34,7 +36,7 @@ There are a few types of databases available:
 - `fileStorage` - Stores the data in the provided json file.
 - `Redis` - Stores the data in a Redis database; (Requires RedisJson)
 
-# 🚀 Start the server
+# 🚀 Starting the server
 
 ```bash
 $ npm start
