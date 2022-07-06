@@ -30,6 +30,7 @@ export default createStore({
         },
       },
     },
+    players: [] as Player[],
   },
   mutations: {
     setActiveTab(state, tab) {
@@ -42,5 +43,14 @@ export default createStore({
       state.stats = stats;
       updateGraphs();
     },
+    setPlayers(state, players: Player[]) {
+      state.players = players;
+    },
   },
 });
+
+export interface Player {
+  uuid: string;
+  name: string;
+  role: string;
+}

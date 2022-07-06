@@ -1,6 +1,6 @@
 import { Request, Router } from 'express';
-import { connectedPlayers } from '../..';
 import events from '../../utils/events';
+import findPlayer from '../../utils/findPlayer';
 import auth from '../middleware/auth';
 
 const rolesRouter = Router();
@@ -11,12 +11,12 @@ rolesRouter.patch(
   (request: Request<{}, {}, RolesRequestBody>, response) => {
     request.on('end', async () => {
       if (
-        typeof request.body.uuid !== 'string' ||
+        typeof request.body.player !== 'string' ||
         typeof request.body.role !== 'string'
       )
         return response.sendStatus(400);
 
-      const player = connectedPlayers.find((p) => p.uuid === request.body.uuid);
+      const player = findPlayer(request.body.player);
       if (!player) {
         return response.sendStatus(404);
       }
@@ -29,7 +29,7 @@ rolesRouter.patch(
       });
 
       if (oldRole === player.role.name) {
-        return response.sendStatus(200);
+        return response.sendStatus(304);
       } else {
         return response.sendStatus(200);
       }
@@ -40,6 +40,6 @@ rolesRouter.patch(
 export default rolesRouter;
 
 interface RolesRequestBody {
-  uuid: string;
+  player: string;
   role: string;
 }

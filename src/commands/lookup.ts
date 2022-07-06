@@ -1,16 +1,16 @@
-import { connectedPlayers } from '..';
+import findPlayer from '../utils/findPlayer';
 import Command from './Command';
 
 const command = new Command('lookup', 'Look up for a player');
 
-command.help = `usage: lookup <player name>`;
+command.help = `usage: lookup <player name or player uuid>`;
 
 command.setHandler((player, command, args) => {
   const playerName = args[0];
   if (!playerName)
     return player.sendConsoleMessage(`§cYou must specify a player!`);
 
-  const p = connectedPlayers.find((p) => p.username === playerName);
+  const p = findPlayer(playerName);
   if (!p) return player.sendConsoleMessage(`§cPlayer not found!`);
 
   const message = `§lLookup: ${p.username}

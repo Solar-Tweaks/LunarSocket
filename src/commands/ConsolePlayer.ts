@@ -5,16 +5,17 @@ export default class ConsolePlayer {
   public username: string;
   public operator: boolean;
   public role: { data: { permissions: string[] } };
+  public handler: CommandHandler;
 
   public constructor() {
     this.username = 'Console';
     this.operator = true;
     this.role = { data: { permissions: ['*'] } };
 
-    const handler = new CommandHandler(this);
+    this.handler = new CommandHandler(this);
 
     process.stdin.on('data', (data) => {
-      handler.handle(data.toString().replace('\n', ''));
+      this.handler.handle(data.toString().replace('\n', ''));
     });
   }
 

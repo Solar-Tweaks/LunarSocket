@@ -5,6 +5,7 @@ import { isProduction } from '..';
 import Player from '../player/Player';
 import logger from '../utils/logger';
 import ApplyCosmeticsPacket from './ApplyCosmeticsPacket';
+import ChatMessagePacket from './ChatMessagePacket';
 import ClientBanPacket from './ClientBanPacket';
 import ConsoleMessagePacket from './ConsoleMessagePacket';
 import DoEmotePacket from './DoEmotePacket';
@@ -21,16 +22,18 @@ import HostListRequestPacket from './HostListRequest';
 import JoinServerPacket from './JoinServerPacket';
 import KeepAlivePacket from './KeepAlivePacket';
 import NotificationPacket from './NotificationPacket';
-import PacketId16 from './PacketId16';
-import PacketId17 from './PacketId17';
-import PacketId22 from './PacketId22';
-import PacketId24 from './PacketId24';
-import PacketId7 from './PacketId7';
+import PacketId71 from './PacketId71';
+import PacketId73 from './PacketId73';
+import PendingRequestsPacket from './PendingRequestsPacket';
 import PlayEmotePacket from './PlayEmotePacket';
 import PlayerInfoPacket from './PlayerInfoPacket';
 import PlayerInfoRequestPacket from './PlayerInfoRequestPacket';
+import ReceiveFriendRequestPacket from './ReceiveFriendRequest';
+import RemoveFriendPacket from './RemoveFriendPacket';
 import TaskListPacket from './TaskListPacket';
 import TaskListRequestPacket from './TaskListRequestPacket';
+import ToggleFriendRequestsPacket from './ToggleFriendRequestsPacket';
+import UpdateVisiblePlayersPacket from './UpdateVisiblePlayersPacket';
 
 const OutgoingPackets = {
   giveEmotes: GiveEmotesPacket,
@@ -39,7 +42,7 @@ const OutgoingPackets = {
   playerInfo: PlayerInfoPacket,
   friendList: FriendListPacket,
   friendMessage: FriendMessagePacket,
-  id7: PacketId7,
+  pendingRequestsPacket: PendingRequestsPacket,
   friendRequest: FriendRequestPacket,
   friendResponse: FriendResponsePacket,
   forceCrash: ForceCrashPacket,
@@ -48,12 +51,8 @@ const OutgoingPackets = {
   clientBan: ClientBanPacket,
   friendUpdate: FriendUpdatePacket,
   joinServer: JoinServerPacket,
-
-  // Unknown packets
-  PacketId16,
-  PacketId17,
-  PacketId22,
-  PacketId24,
+  receiveFriendRequest: ReceiveFriendRequestPacket,
+  chatMessage: ChatMessagePacket,
 };
 
 // Outgoing is when a packet is sent by the server to the client
@@ -111,12 +110,11 @@ const IncomingPackets = {
   keepAlive: KeepAlivePacket,
   taskList: TaskListPacket,
   hostList: HostListPacket,
-
-  // Unknown packets
-  PacketId16,
-  PacketId17,
-  PacketId22,
-  PacketId24,
+  removeFriend: RemoveFriendPacket,
+  toggleFriendRequests: ToggleFriendRequestsPacket,
+  updateVisiblePlayers: UpdateVisiblePlayersPacket,
+  id71: PacketId71,
+  id73: PacketId73,
 };
 
 // Incoming is when a packet is sent by the client to the server
@@ -140,7 +138,7 @@ export class IncomingPacketHandler extends (EventEmitter as new () => TypedEvent
       if (!isProduction) logger.warn('Unknown packet id (incoming):', id, data);
       return this.player.writeToServer(data);
     } else if (!isProduction)
-      logger.debug(`Sending packet id ${id} (${Packet.name}) to client`);
+      logger.debug(`Received packet id ${id} (${Packet.name}) from the client`);
 
     const packet = new Packet(buf);
     packet.read();

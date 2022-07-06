@@ -2,18 +2,18 @@ import BufWrapper from '@minecraft-js/bufwrapper';
 
 import Packet from './Packet';
 
-export default class PacketId24 extends Packet<Id24> {
+export default class ConstantChangedPacket extends Packet<ConstantChanged> {
   public static id = 24;
 
   public constructor(buf?: BufWrapper) {
     super(buf);
   }
 
-  public write(data: Id24): void {
+  public write(data: ConstantChanged): void {
     this.data = data;
 
     this.buf = new BufWrapper(null, { oneConcat: true });
-    this.buf.writeVarInt(PacketId24.id); // Packet ID
+    this.buf.writeVarInt(ConstantChangedPacket.id); // Packet ID
 
     this.buf.writeInt(data.id);
     this.buf.writeString(data.value);
@@ -29,7 +29,7 @@ export default class PacketId24 extends Packet<Id24> {
   }
 }
 
-interface Id24 {
+interface ConstantChanged {
   id: number;
   value: string;
 }

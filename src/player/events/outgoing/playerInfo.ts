@@ -1,5 +1,5 @@
-import { connectedPlayers } from '../../..';
 import PlayerInfoPacket from '../../../packets/PlayerInfoPacket';
+import findPlayer from '../../../utils/findPlayer';
 import Player from '../../Player';
 
 export default function (player: Player, packet: PlayerInfoPacket): void {
@@ -37,9 +37,7 @@ export default function (player: Player, packet: PlayerInfoPacket): void {
     return player.writeToClient(newPacket);
   }
 
-  const connectedPlayer = connectedPlayers.find(
-    (p) => p.uuid === packet.data.uuid
-  );
+  const connectedPlayer = findPlayer(packet.data.uuid);
   // If the player is not on the player websocket, sending back the original packet
   if (!connectedPlayer) return player.writeToClient(packet);
 

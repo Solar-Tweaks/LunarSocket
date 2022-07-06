@@ -136,6 +136,7 @@ export default class Player {
             const handler = await import(
               join(process.cwd(), 'dist', 'player', 'events', 'outgoing', event)
             );
+
             handler.default(this, packet);
           }
         );
@@ -153,6 +154,7 @@ export default class Player {
             const handler = await import(
               join(process.cwd(), 'dist', 'player', 'events', 'incoming', event)
             );
+
             handler.default(this, packet);
           }
         );

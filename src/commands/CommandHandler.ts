@@ -61,4 +61,4 @@ readdirSync(basePath).forEach(async (file) => {
   }
 });
 
-new ConsolePlayer();
+export const consolePlayer = new ConsolePlayer();

@@ -20,7 +20,7 @@
         color="0, 183, 254"
       />
       <Number
-        icon="fa-solid fa-stopwatch"
+        icon="fa-solid fa-gauge-simple"
         name="Average"
         :value="String($store.state.stats.averageConnected)"
         color="253, 34, 84"
@@ -359,6 +359,10 @@ div#rank > p {
   line-height: 18px;
   color: var(--color-dark-gray);
   margin: -15px 0 0 25px;
+}
+
+div#rank > canvas {
+  margin-top: 20px;
 }
 
 div#status {

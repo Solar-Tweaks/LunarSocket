@@ -7,40 +7,40 @@
 | 4         | [FriendList](#friendlist---4)                                                                 | Client   |
 | 5         | [FriendMessage](#friendmessage---5)                                                           | Both     |
 | 6         | JoinServer ([C](#joinserver-clientbound---6)\|[S](#joinserver-serverbound---6))               | Both     |
-| 7         | [Unknown](#unknown---7)                                                                       | Client   |
+| 7         | [PendingRequests](#pendingrequests---7)                                                       | Client   |
 | 8         | [PlayerInfo](#playerinfo---8)                                                                 | Client   |
 | 9         | FriendRequest ([C](#friendrequest-clientbound---9)\|[S](#friendrequest-serverbound---9))      | Both     |
-| 16        | [Unknown](#unknown---16)                                                                      | Unknown  |
+| 16        | [ReceiveFriendRequest](#receivefriendrequest---16)                                            | Client   |
 | 17        | [RemoveFriend](#removefriend---17)                                                            | Server   |
 | 18        | [FriendUpdate](#friendupdate---18)                                                            | Client   |
 | 20        | [ApplyCosmetics](#applycosmetics---20)                                                        | Server   |
 | 21        | FriendResponse ([C](#friendresponse-clientbound---21)\|[S](#friendresponse-serverbound---21)) | Both     |
-| 22        | [Unknown](#unknown---22)                                                                      | Unknown  |
-| 24        | [Unknown](#unknown---24)                                                                      | Unknown  |
-| 25        |                                                                                               |          |
+| 22        | [ToggleFriendRequests](#togglefriendrequests---22)                                            | Server   |
+| 24        | [ConstantChanged](#constantchanged---24)                                                      | Server   |
+| 25        | [Unused](#unused---25)                                                                        | Unknown  |
 | 33        | [ForceCrash](#forcecrash---33)                                                                | Client   |
 | 35        | [TaskListRequest](#tasklistrequest---35)                                                      | Client   |
 | 36        | [TaskList](#tasklist---36)                                                                    | Server   |
 | 39        | [DoEmote](#doemote---39)                                                                      | Server   |
-| 40        |                                                                                               |          |
+| 40        | [Unknown](#unknown---40)                                                                      | Unknown  |
 | 48        | [PlayerInfoRequest](#playerinforequest---48)                                                  | Server   |
-| 50        |                                                                                               |          |
+| 50        | [UpdateVisiblePlayers](#updatevisibleplayers---50)                                            | Server   |
 | 51        | [PlayEmote](#playemote---51)                                                                  | Client   |
-| 52        |                                                                                               |          |
-| 53        |                                                                                               |          |
-| 54        |                                                                                               |          |
-| 55        |                                                                                               |          |
+| 52        | [Unused](#unused---52)                                                                        | Unknown  |
+| 53        | [Unused](#unused---53)                                                                        | Unknown  |
+| 54        | [Unused](#unused---54)                                                                        | Server   |
+| 55        | [Unused](#unused---55)                                                                        | Unknown  |
 | 56        | [EquipEmote](#equipemotes---56)                                                               | Server   |
 | 57        | [GiveEmotes](#giveemotes---57)                                                                | Client   |
 | 64        | [KeepAlive](#keepalive---64)                                                                  | Server   |
-| 65        |                                                                                               |          |
+| 65        | [ChatMessage](#chatmessage---65)                                                              | Client   |
 | 67        | [HostListRequest](#hostlistrequest---67)                                                      | Client   |
 | 68        | [HostList](#hostlist---68)                                                                    | Server   |
-| 69        |                                                                                               |          |
-| 70        |                                                                                               |          |
-| 71        |                                                                                               |          |
-| 72        |                                                                                               |          |
-| 73        |                                                                                               |          |
+| 69        | [Unused](#unused---69)                                                                        | Server   |
+| 70        | [Unused](#unused---70)                                                                        | Server   |
+| 71        | [Unknown](#unknown---71)                                                                      | Server   |
+| 72        | [Unused](#unused---72)                                                                        | Unknown  |
+| 73        | [Unknown](#unknown---73)                                                                      | Server   |
 | 1056      | [ClientBan](#clientban---1056)                                                                | Client   |
 
 # Clientbound packets
@@ -125,19 +125,17 @@ Note: _The `server` field is set to "In Menus" when the friend leaves the server
 
 See [implementation](../src/packets/JoinServerPacket.ts)
 
-## Unknown - `7`
+## PendingRequests - `7`
 
-???
+Sent by the server when you connect. Contains the list of pending friend requests you have to accept or deny.
 
 ```js
 {
-  // Don't ask me why this is called bulk ¯\_(ツ)_/¯
-  // That's how Lunar calls it
-  bulk: 'Array<unknown>';
+  bulk: 'JsonString<{ "bulk": [ { "name": "...", "uuid": "..." }, {...} ] }>';
 }
 ```
 
-See [implementation](../src/packets/PacketId7.ts)
+See [implementation](../src/packets/PendingRequestsPacket.ts)
 
 ## PlayerInfo - `8`
 
@@ -173,7 +171,7 @@ See [implementation](../src/packets/PlayerInfoPacket.ts)
 When the player receives a friend request from someone
 
 Note: _The `uuid` field is a string and not an UUID! This is not a mistake_
-Note: \*The `uuid` field seems to be empty everytime
+Note: _The `uuid` field seems to be empty everytime_
 
 ```js
 {
@@ -183,6 +181,20 @@ Note: \*The `uuid` field seems to be empty everytime
 ```
 
 See [implementation](../src/packets/FriendRequestPacket.ts)
+
+## ReceiveFriendRequest - `16`
+
+Sent to the client by the server when you receive a friend request
+
+```js
+{
+  uuid: 'string',
+  name: 'string',
+  isAdded: 'boolean'
+}
+```
+
+See [implementation](../src/packets/ReceiveFriendRequest.ts)
 
 ## FriendUpdate - `18`
 
@@ -266,6 +278,20 @@ Packet containing all player's emotes
 ```
 
 See [implementation](../src/packets/GiveEmotesPacket.ts)
+
+## ChatMessage - `65`
+
+When sent, the message field is printed in the player's minecraft chat
+
+Note: _The client also has the write method (which means theoretically this packet could be server bound too) but we never saw this packet being sent by the client_
+
+```js
+{
+  message: 'string';
+}
+```
+
+See [implementation](../src/packets/ChatMessagePacket.ts)
 
 ## HostListRequest - `67`
 
@@ -403,6 +429,33 @@ Sent when uh I don't remember
 
 See [implementation](../src/packets/FriendResponsePacket.ts)
 
+## ToggleFriendRequests - `22`
+
+Sent by the client when you toggle your friend requests (enable or disable them)
+
+```js
+{
+  statis: 'boolean';
+}
+```
+
+See [implementation](../src/packets/ToggleFriendRequestsPacket.ts)
+
+## ConstantChanged - `24`
+
+Sent to socket when a known good constant has been changed in the client, for example the reach constant.
+
+Note: **Packet is unused today**
+
+```js
+{
+  id: 'int',
+  value: 'string'
+}
+```
+
+See [implementation](../src/packets/ConstantChanged.ts)
+
 ## TaskList - `36`
 
 Packet containing the output of the `tasklist.exe` program on Windows..
@@ -485,6 +538,19 @@ The server should send [PlayerInfo](#playerinfo---8) for every player on Lunar C
 
 See [implementation](../src/packets/PlayerInfoRequestPacket.ts)
 
+## UpdateVisiblePlayers - `50`
+
+Around every 150ms the client sends this packet to tell the server what players they current see.
+The whole list isn't sent everytime, only the difference.
+
+```js
+{
+  players: 'Array<UUID>';
+}
+```
+
+See [implementation](../src/packets/UpdateVisiblePlayersPacket.ts)
+
 ## EquipEmotes - `56`
 
 Sent when you equip an emote
@@ -547,23 +613,104 @@ See [implementation](../src/packets/HostListPacket.ts)
 
 </details>
 
-# Unknown packets
+# Unused packets
 
-## Unknown - `16`
+## Unused - `25`
 
 ??
 
 ```js
 {
-  uuid: 'string',
-  name: 'string',
-  unknownBoolean: 'boolean'
+  data: 'Array<bytes>';
 }
 ```
 
-See [implementation](../src/packets/PacketId16.ts)
+See [implementation](../src/packets/PacketId25.ts)
 
-## Unknown - `22`
+## Unused - `52`
+
+??
+
+```js
+{
+  uuid: 'UUID',
+  isFlying: 'boolean'
+}
+```
+
+See [implementation](../src/packets/PacketId52.ts)
+
+## Unused - `53`
+
+??
+
+```js
+{
+}
+```
+
+See [implementation](../src/packets/PacketId53.ts)
+
+## Unused - `55`
+
+??
+
+```js
+{
+  unknownCollectionA: 'Collection<long>';
+  unknownCollectionB: 'Collection<long>';
+}
+```
+
+See [implementation](../src/packets/PacketId54.ts)
+
+## Unused - `55`
+
+??
+
+```js
+{
+}
+```
+
+See [implementation](../src/packets/PacketId55.ts)
+
+## Unused - `69`
+
+??
+
+```js
+{
+}
+```
+
+See [implementation](../src/packets/PacketId69.ts)
+
+## Unused - `70`
+
+??
+
+```js
+{
+}
+```
+
+See [implementation](../src/packets/PacketId70.ts)
+
+## Unused - `72`
+
+??
+
+```js
+{
+}
+```
+
+See [implementation](../src/packets/PacketId72.ts)
+
+# Unknown packets
+
+## Unknown - `40`
 
 ??
 
@@ -573,17 +720,29 @@ See [implementation](../src/packets/PacketId16.ts)
 }
 ```
 
-See [implementation](../src/packets/PacketId22.ts)
+See [implementation](../src/packets/PacketId40.ts)
 
-## Unknown - `24`
+## Unknown - `71`
+
+Apparently the first field is a server ip (not sure).
+
+```js
+{
+  unknownStringA: 'string';
+  unknownStringB: 'string';
+}
+```
+
+See [implementation](../src/packets/PacketId71.ts)
+
+## Unknown - `73`
 
 ??
 
 ```js
 {
-  id: 'int',
-  value: 'string'
+  unknownList: 'Array<int>';
 }
 ```
 
-See [implementation](../src/packets/PacketId24.ts)
+See [implementation](../src/packets/PacketId73.ts)

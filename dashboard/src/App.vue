@@ -15,7 +15,7 @@ import Login from './components/Login.vue';
 import Sidebar from './components/Sidebar.vue';
 import Header from './components/Header.vue';
 import Content from './components/Content/Content.vue';
-import fetchStats, { isKeyValid } from './api';
+import { isKeyValid, fetchStats, fetchPlayers } from './api';
 import store from './store';
 
 export let checkKeyAndProceed: (key: string) => Promise<void>;
@@ -35,7 +35,7 @@ export default defineComponent({
         this.loggedIn = true;
         localStorage.setItem('apiKey', key);
         store.commit('setApiKey', key);
-        await fetchStats();
+        await Promise.all([fetchStats(), fetchPlayers()]);
       } else {
         alert('Your key is invalid');
         localStorage.removeItem('apiKey');

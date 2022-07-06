@@ -1,32 +1,34 @@
+// 😏
+
 import BufWrapper from '@minecraft-js/bufwrapper';
 
 import Packet from './Packet';
 
-export default class PacketId7 extends Packet<Id7> {
-  public static id = 7;
+export default class PacketId69 extends Packet<Id69> {
+  public static id = 69;
 
   public constructor(buf?: BufWrapper) {
     super(buf);
   }
 
-  public write(data: Id7): void {
+  public write(data: Id69): void {
     this.data = data;
 
     this.buf = new BufWrapper(null, { oneConcat: true });
-    this.buf.writeVarInt(PacketId7.id); // Packet ID
+    this.buf.writeVarInt(PacketId69.id); // Packet ID
 
-    this.buf.writeString(JSON.stringify(data.bulk));
+    this.buf.writeString(this.data.id);
 
     this.buf.finish();
   }
 
   public read(): void {
     this.data = {
-      bulk: JSON.parse(this.buf.readString()),
+      id: this.buf.readString(),
     };
   }
 }
 
-interface Id7 {
-  bulk: unknown[];
+interface Id69 {
+  id: string;
 }
